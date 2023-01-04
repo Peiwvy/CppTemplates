@@ -10,7 +10,8 @@
 		"terminal.integrated.shell.linux": "/bin/bash",
 		"ros.distro": "melodic",
 		"C_Cpp.intelliSenseEngine": "Disabled",
-		"C_Cpp.autocomplete": "Disabled"
+		"C_Cpp.autocomplete": "Disabled",
+		"clangd.path": "/usr/bin/clangd-15"
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [

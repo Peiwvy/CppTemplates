@@ -1,4 +1,4 @@
-FROM ros:melodic-ros-base-bionic
+FROM ros:melodic-perception-bionic
 # Args for the non-root user
 ARG USERNAME=cyber
 ARG USER_UID=1000
@@ -14,13 +14,16 @@ RUN sed -i 's/http:\/\/packages.ros.org/http:\/\/mirror.sjtu.edu.cn/g' /etc/apt/
 # Update and install general packages
 RUN apt-get update && apt-get upgrade -y\
   && apt-get install -q -y openssh-client vim bash-completion tmux gdb wget
+# Update and install gcc-9
+RUN  apt-get update && apt-get install -y software-properties-common && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
+  && apt-get update  && apt-get install -y gcc-9 g++-9 build-essential
+RUN  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9 \
+  && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
 # Project related packages
-RUN apt-get install -q -y libgoogle-glog-dev libeigen3-dev libyaml-cpp-dev
+RUN apt-get install -q -y libgoogle-glog-dev libeigen3-dev libyaml-cpp-dev doxygen
 # Build and install gtest
 WORKDIR /usr/src/gtest
-RUN cmake .
-RUN make
-RUN mv libg* /usr/lib/
+RUN cmake . && make && mv libg* /usr/lib/
 # Copy scripts to container
 COPY toolchains.sh /home/${USERNAME}/
 RUN bash /home/${USERNAME}/toolchains.sh
